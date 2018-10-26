@@ -1,0 +1,3 @@
+#! /bin/bash
+cd build/
+./build/src/placa -h18 -v14 -b253 -g -p perfil1.txt -q -f
