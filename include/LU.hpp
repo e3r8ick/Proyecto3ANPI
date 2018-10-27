@@ -27,17 +27,13 @@ namespace anpi
 /***
  *  Uses the doolittle algorithm every time because the graphic
  * shows that it is the more efficient method for any size
- * 
- * @param[in] A = Matriz de entrada 
- * @param[out] LU = Matriz de salida con LU
- * @param[out] p = Vector de permutaciones 
  * */
 template <typename T>
 inline void lu(const anpi::Matrix<T> &A,
                anpi::Matrix<T> &LU,
                std::vector<size_t> &p)
 {
-    anpi::luDoolittle(A, LU, p);
+    anpi::lumpl::luDoolittle(A, LU, p);
     
 }
 

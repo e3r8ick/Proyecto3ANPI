@@ -278,7 +278,7 @@ int main(int ac, char *av[])
   anpi::formEDP(edp, hori, vert, tempsTop, tempBot, tempLeft, tempRight, i, sol);
   anpi::Matrix<double> L;
   anpi::liebmann(edp, L, sol);
-  anpi::solveLU(edp, x, sol);
+  anpi::lumpl::solveLU(edp, x, sol);
 
   /* guarda la matriz en un archivo */
   std::ofstream matrixFile;  
