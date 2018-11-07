@@ -53,8 +53,8 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 															anpi::Matrix<T> &New,
 												int psize, int Acols, int Arows) 
 	{
-
-	int ini, fin = 0;
+/*
+	int ini, fin, iter = 0;
 	T Top, Bot, Izq, Der = 0;
 		
 	// Iterates on New Matrix to get edge values
@@ -68,8 +68,9 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 			fin = ((k+1)*Acols/psize)+1;
 			
 			for (int i = ini; i<fin; i++) {
-				Top += A[0][i];
-				Bot += A[Acols-1][i];
+				Top += A[0][iter];
+				Bot += A[Acols-1][iter];
+				iter++;
 			}
 			
 			New[0][k] = Top/(fin-ini);
@@ -86,6 +87,7 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 			New[k][0] = Izq/(fin-ini);
 			New[k][psize-1] = Der/(fin-ini);
 		}
+*/
 }
 
 /**
@@ -101,15 +103,21 @@ void fillInitialContents(const anpi::Matrix<T> &Old,
 															 anpi::Matrix<T> &New,
 													 int psize) 
 	{
-	for (int i = 1; i<psize; i+2) {
-		for (int j = 1; j<psize; j+2) {
 
+	// Iterator for Old matrix
+	int l, k = 1;
+
+	for (int i = 1; i<=psize-2; i+=2) {
+		l = 1;
+		for (int j = 1; j<=psize-2; j+=2) {
 			// Each old value becomes 4 new ones
-			New[i][j] = Old[i][j];
-			New[i+1][j] = Old[i][j];
-			New[i][j+1] = Old[i][j];
-			New[i+1][j+1] = Old[i][j];
+			New[i][j] = Old[k][l];
+			New[i+1][j] = Old[k][l];
+			New[i][j+1] = Old[k][l];
+			New[i+1][j+1] = Old[k][l];
+			l++;
 		}
+	k++;
 	}
 
 }
