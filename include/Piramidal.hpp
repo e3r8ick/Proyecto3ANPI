@@ -53,41 +53,77 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 															anpi::Matrix<T> &New,
 												int psize, int Acols, int Arows) 
 	{
-/*
-	int ini, fin, iter = 0;
-	T Top, Bot, Izq, Der = 0;
-		
-	// Iterates on New Matrix to get edge values
-	for (int k = 0; k < psize; k++) {
-				
-		Top = Bot = Izq = Der = 0; //reset avgs	
-			
-		///Optimizable
-		// Get average values of known temperature values Top and Bottom
-			ini = (k*Acols/psize)+1;
-			fin = ((k+1)*Acols/psize)+1;
-			
-			for (int i = ini; i<fin; i++) {
-				Top += A[0][iter];
-				Bot += A[Acols-1][iter];
-				iter++;
-			}
-			
-			New[0][k] = Top/(fin-ini);
-			New[psize-1][k] = Bot/(fin-ini);
-		// Get average values of known temperature values Left and Right
-			ini = (k*Arows/psize)+1;
-			fin = ((k+1)*Arows/psize)+1;
-			
-			for (int i = ini; i<fin; i++) {
-				Izq += A[i][0];
-				Der += A[i][Arows-1];
-			}
-			
-			New[k][0] = Izq/(fin-ini);
-			New[k][psize-1] = Der/(fin-ini);
+
+		//Optimizable -> separate threads for cols and rows
+		//Optimizable -> all at once if A is square 
+		//Optimizable -> don't consider corners
+
+	int k = 0; // A col iterator
+	
+	// average out top and bottom line
+	for (int i = 0; i<psize; i++) {
+		int iupper = (int) Acols*(i+1)/psize; 
+		int usedValues = 0; //divider
+		float top, bot = 0; //accumulators
+					std::cout << "i=" << i << ": ";
+		for (; k<iupper; k++) {
+			usedValues++;
+			top += A[0][k];
+			bot += A[Arows-1][k];
+					std::cout << A[Arows-1][k] << ", ";
 		}
-*/
+
+					std::cout << "acum: " << bot << " | ";
+					std::cout << "used: " << usedValues << " | ";
+
+		//get averages and avoid div by 0					
+		if (usedValues != 0) {
+				top /= usedValues;
+				bot /= usedValues;
+		}	else {
+				top /= 1;
+				bot /= 1;
+		}
+					std::cout << " average: " << bot << std::endl;
+
+		//store averages
+		New[0][i] = top;
+		New[psize-1][i] = bot;
+
+		// hard-reset acumulators
+		top -= top;
+		bot -= bot;
+	}
+
+	int m = 0; // A row iterator
+	
+	// average out left and right lines
+	for (int j = 0; j<psize; j++) {
+		int jupper = (int) Arows*(j+1)/psize; 
+		int usedValues = 0; //divider
+		int izq, der = 0; //accumulators
+		for (; m<jupper; m++) {
+			usedValues++;
+			izq += A[m][0];
+			der += A[m][Acols-1];
+		}
+		//get averages
+		if (usedValues != 0) {
+			izq /= usedValues;
+			der /= usedValues;
+		}	else {
+				izq /= 1;
+				der /= 1;
+		}
+
+		//store averages
+		New[j][0] = izq;
+		New[j][psize-1] = der;
+
+		// hard-reset acumulators
+		izq -= izq;
+		der -= der;
+	}
 }
 
 /**
