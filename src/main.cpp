@@ -17,6 +17,7 @@
 #include "edp.hpp"
 #include "liebmann.hpp"
 #include "SolveLU.hpp"
+#include "Piramidal.hpp"
 
 
 namespace po = boost::program_options;
@@ -276,8 +277,10 @@ int main(int ac, char *av[])
   std::vector<double> sol;
   std::vector<double> x;
   anpi::formEDP(edp, hori, vert, tempsTop, tempBot, tempLeft, tempRight, i, sol);
-  anpi::Matrix<double> L;
-  anpi::liebmann(edp, L, sol);
+  anpi::Matrix<double> Li;
+  anpi::Matrix<double> Lo;
+  //anpi::Piramidal(Li, Lo);
+  anpi::liebmann(edp, Lo, sol);
   anpi::lumpl::solveLU(edp, x, sol);
 
   /* guarda la matriz en un archivo */

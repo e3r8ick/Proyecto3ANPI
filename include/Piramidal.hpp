@@ -64,7 +64,7 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 	for (int i = 0; i<psize; i++) {
 		int iupper = (int) Acols*(i+1)/psize; 
 		int usedValues = 0; //divider
-		float top, bot = 0; //accumulators
+		T top, bot = 0; //accumulators
 																						//std::cout << "i=" << i << ": ";
 		for (; k<iupper; k++) {
 			usedValues++;
@@ -101,7 +101,7 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 	for (int j = 0; j<psize; j++) {
 		int jupper = (int) Arows*(j+1)/psize; 
 		int usedValues = 0; //divider
-		int izq, der = 0; //accumulators
+		T izq, der = 0; //accumulators
 		for (; m<jupper; m++) {
 			usedValues++;
 			izq += A[m][0];
@@ -229,8 +229,8 @@ void Piramidal(const anpi::Matrix<T> &A, anpi::Matrix<T> &L)
 		}
 
 			// Calculate new internal values using onw iteratio of the liebmann algorithm
-		//std::vector<T> b
-		//anpi::liebmannOnce(A, New, b);
+		std::vector<T> b;
+		anpi::liebmannOnce(A, New, b);
 
 		Old = New;	// everything that's new becomes old
 

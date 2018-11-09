@@ -4,8 +4,8 @@
  *
  * This file is part of the numerical analysis lecture CE3102 at TEC
  *
- * @Author: Cristofer Villegas
- * @Date  : 05.06.2018
+ * @Author: 
+ * @Date  : 
  */
 
 #include <cmath>
@@ -49,6 +49,7 @@ void liebmann(const Matrix<T> &A,
   T maxi = std::numeric_limits<T>::max();
   size_t iter = 0;
   size_t i, j, k;
+  k = 0;
 
   time_t time0;   // create timers.
   time_t time1;
@@ -57,7 +58,6 @@ void liebmann(const Matrix<T> &A,
 
   while (iter < maxi)
   {
-    k = 0;
     /**
      * Se hace de esta manera para paralilizar el cálculo, haciendo dos hilos que 
      * corran en paralelo que cada uno calcule la mita de la matriz

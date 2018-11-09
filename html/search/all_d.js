@@ -7,7 +7,6 @@ var searchData=
   ['setylabel',['setYLabel',['../classanpi_1_1Plot2d.html#a689b16faa995ca545fe13088cbd382a5',1,'anpi::Plot2d']]],
   ['setyrange',['setYRange',['../classanpi_1_1Plot2d.html#a5bac0f99358cd81f048cc5c5bc69ffda',1,'anpi::Plot2d']]],
   ['show',['show',['../classanpi_1_1Plot2d.html#a41165ac70edb258fa0fbcce04ddf7025',1,'anpi::Plot2d']]],
-  ['solvelu',['solveLU',['../namespaceanpi.html#a9663f9260c6491bae77da84cb1a6090c',1,'anpi']]],
   ['spline',['spline',['../namespaceanpi.html#a98a9165f374dead81abc3017060e9482',1,'anpi']]],
   ['swap',['swap',['../classanpi_1_1Matrix.html#a137779b37d7ececd016a16398c02ee67',1,'anpi::Matrix']]]
 ];
