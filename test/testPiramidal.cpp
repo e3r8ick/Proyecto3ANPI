@@ -120,5 +120,37 @@ BOOST_AUTO_TEST_CASE( fillInitialContents ) {
 
 }
 
+BOOST_AUTO_TEST_CASE( initializeTargetMatrix ) {
+
+	anpi::Matrix<float> L = {{20,20,20,20,20,20,20},
+													 {80, 0, 0, 0, 0, 0,20},
+													 {80, 0, 0, 0, 0, 0,20},
+												 	 {80, 0, 0, 0, 0, 0,20},
+												 	 { 0,10,20,30,40,50,60}};
+
+	anpi::Matrix<float> New	  = {{ 0,    20,    20, 0},	//create target matrix 
+														   {80, 43.12, 29.84,20},
+															 {80, 43.59, 32.11,20},
+														   { 0,    20,    20, 0}};
+
+	anpi::Matrix<float> resL ={{20,    20,    20,    20,		20,    20, 20},
+														 {80, 43.12, 43.12, 29.84, 29.84, 29.84, 20},
+														 {80, 43.59, 43.59, 32.11, 32.11, 32.11, 20},
+													 	 {80, 43.59, 43.59, 32.11, 32.11, 32.11, 20},
+													 	 { 0,    10,    20,    30,    40,    50, 60}};
+
+	initializeA (L, New, 4, 5, 7);
+
+	std::cout << "L" << std::endl;
+		for (int i=0; i<5; i++) {
+			for (int j=0; j<7; j++) {
+				std::cout << L[i][j] << ", ";
+			}
+			std::cout << std::endl;
+		}
+
+	BOOST_CHECK ( L == resL);
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
