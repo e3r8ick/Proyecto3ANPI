@@ -49,7 +49,7 @@ int main(int ac, char *av[])
 {
   /**************DECLARA E INICIALIZA LAS VARIABLES *****************/
   std::vector<double> tempsTop, tempBot, tempLeft, tempRight;
-  bool visualize, flow;
+  bool visualize, flow, optimize;
   bool i[4] = {true, true, true, true}; //aislar tblr;
   std::string fileName;
   double value;
@@ -57,7 +57,7 @@ int main(int ac, char *av[])
   hori = vert = 20;
   grid = 5;
   flow = false;
-  visualize = true;
+  visualize = optimize = true;
 
   std::string line, borde;
   borde == "";
@@ -78,7 +78,8 @@ int main(int ac, char *av[])
                     ("v,v", po::value<int>(), "Pixeles verticales")
                     ("q,q", "Desactivar visualización")
                     ("f,f", "Activa el cálculo de flujo de calor")
-                    ("g,g", po::value<int>(), "Tamaño de rejilla");
+                    ("g,g", po::value<int>(), "Tamaño de rejilla")
+										("o,o", "Turns off optimization of the solution");
   po::variables_map map;
   try
   {
@@ -120,6 +121,10 @@ int main(int ac, char *av[])
   if (map.count("f"))
   {
     flow = true;
+  }
+  if (map.count("o"))
+  {
+    optimize = false;
   }
 
   /************LEE EL ARCHIVO**********************/
@@ -277,10 +282,15 @@ int main(int ac, char *av[])
   std::vector<double> sol;
   std::vector<double> x;
   anpi::formEDP(edp, hori, vert, tempsTop, tempBot, tempLeft, tempRight, i, sol);
-  anpi::Matrix<double> Li;
-  anpi::Matrix<double> Lo;
-  //anpi::Piramidal(Li, Lo);
-  anpi::liebmann(edp, Lo, sol);
+	anpi::Matrix<double> Li;
+	if (optimize) {
+	  anpi::Matrix<double> Lo;
+	  anpi::Piramidal(Li, Lo);
+		anpi::liebmann(edp, Lo, sol);
+	} else {
+		anpi::liebmann(edp, Li, sol);
+	}
+  
   anpi::lumpl::solveLU(edp, x, sol);
 
   /* guarda la matriz en un archivo */

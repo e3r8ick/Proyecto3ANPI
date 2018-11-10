@@ -53,7 +53,6 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 															anpi::Matrix<T> &New,
 												int psize, int Acols, int Arows) 
 	{
-
 		//Optimizable -> separate threads for cols and rows
 		//Optimizable -> all at once if A is square 
 		//Optimizable -> don't consider corners
@@ -64,17 +63,13 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 	for (int i = 0; i<psize; i++) {
 		int iupper = (int) Acols*(i+1)/psize; 
 		int usedValues = 0; //divider
-		T top, bot = 0; //accumulators
-																						//std::cout << "i=" << i << ": ";
+		T top = 0;
+		T bot = 0;
 		for (; k<iupper; k++) {
 			usedValues++;
 			top += A[0][k];
 			bot += A[Arows-1][k];
-																						//std::cout << A[Arows-1][k] << ", ";
 		}
-
-																						//std::cout << "acum: " << bot << " | ";
-																						//std::cout << "used: " << usedValues << " | ";
 
 		//get averages and avoid div by 0					
 		if (usedValues != 0) {
@@ -84,7 +79,6 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 				top /= 1;
 				bot /= 1;
 		}
-																						//std::cout << " average: " << bot << std::endl;
 
 		//store averages
 		New[0][i] = top;
@@ -101,7 +95,8 @@ void fillInitialBorders(const anpi::Matrix<T> &A,
 	for (int j = 0; j<psize; j++) {
 		int jupper = (int) Arows*(j+1)/psize; 
 		int usedValues = 0; //divider
-		T izq, der = 0; //accumulators
+		T izq = 0;
+		T der = 0;
 		for (; m<jupper; m++) {
 			usedValues++;
 			izq += A[m][0];
@@ -191,6 +186,21 @@ void initializeA (anpi::Matrix<T> &L,
 	}
 }
 
+template <typename T>
+void printMatrix (const anpi::Matrix<T> &P, char* Name) {
+	std::cout << Name << "- - - - - - - - - - - - - - - - - - - - - -" << std::endl;
+	int Pcols = P.cols();
+	int Prows = P.rows();
+
+	for (int i=0; i<Prows; i++) {
+		std::cout << "i=" << i << ": ";
+			for (int j=0; j<Pcols; j++) {
+				std::cout << P[i][j] << ", ";
+			}
+			std::cout << std::endl;
+		}
+}
+
 
 /**
    *  Creates intial values for the cells in a Matrix based 
@@ -204,40 +214,48 @@ void Piramidal(const anpi::Matrix<T> &A, anpi::Matrix<T> &L)
 {
 	int Arows = A.rows();
 	int Acols = A.cols();
-	int psize, n, lsize = 0;
+	int psize = 0;
+	int n = 0;
+	int lsize = 0;
 	anpi::Matrix<T> Old;
 
+	//printMatrix (A, "Original A Matrix");
+
+		//exception matrix col or row is < 3
 	if (Acols < 3 || Arows < 3) {
 		anpi::Exception ("Matrix is too small");
 	}
 
-//exception matrix col or row is < 3
-	
 	while (psize<=Arows && psize<=Acols) // stop before matrix size exceeds desired matrx size
 		{		
 		psize = anpi::getpSize(n);	// get size for new matix 2+2^n
-		lsize = anpi::getpSize(n);	// get size last size actually used
+		lsize = psize;							// get size last size actually used
 		n++;												// increase iterator
 
-		anpi::Matrix<T> New = Matrix<T>(psize, psize, 0.0); // initialize New matrix in 0s
+		T zero = 0;
+		anpi::Matrix<T> New = Matrix<T>(psize, psize, zero); // initialize New matrix in 0s
+		//printMatrix (New, "New Matrix");
 
 			// Inititalize New matrix
-		anpi::fillInitialBorders(&A, &New, Arows, Acols, psize);
+		anpi::fillInitialBorders(A, New, psize, Acols, Arows);
+		//printMatrix (New, "Borders");
 
 		if (n-1 != 0) { // if it's 0 -> Old is empty
-			anpi::fillInitialContents(&Old, &New, psize);
+			anpi::fillInitialContents(Old, New, psize);
 		}
+		//printMatrix (New, "Contents");
 
-			// Calculate new internal values using onw iteratio of the liebmann algorithm
-		std::vector<T> b;
-		anpi::liebmannOnce(A, New, b);
+			// Calculate new internal values using onw iteration of the liebmann algorithm
+		anpi::liebmannOnce(New, New, psize);
+		//printMatrix (New, "liebmannOnce");
 
 		Old = New;	// everything that's new becomes old
 
 		psize = anpi::getpSize(n);	// update stop condition
 		}
 
-		initializeA (L, Old, lsize, Acols, Arows); 
+		initializeA (L, Old, lsize, Arows, Acols); 
+		//printMatrix (L, "initialized");
 
 }
 

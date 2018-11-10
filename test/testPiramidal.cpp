@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE( initializeTargetMatrix ) {
 													 	 { 0,    10,    20,    30,    40,    50, 60}};
 
 	initializeA (L, New, 4, 5, 7);
-
+/*
 	std::cout << "L" << std::endl;
 		for (int i=0; i<5; i++) {
 			for (int j=0; j<7; j++) {
@@ -148,9 +148,32 @@ BOOST_AUTO_TEST_CASE( initializeTargetMatrix ) {
 			}
 			std::cout << std::endl;
 		}
-
+*/
 	BOOST_CHECK ( L == resL);
 }
 
+BOOST_AUTO_TEST_CASE( piramidalOptimization ) {
+
+	const anpi::Matrix<double> A = {{20,20,20,20,20,20,20},
+															 	  {80, 0, 0, 0, 0, 0,20},
+																  {80, 0, 0, 0, 0, 0,20},
+															 	  {80, 0, 0, 0, 0, 0,20},
+															 	  { 0,10,20,30,40,50,60}};
+
+	anpi::Matrix<double> New (5, 7);
+
+	anpi::Matrix<double> resL ={{20,    20,    20,    20,		20,    20, 20},
+														 {80, 43.12, 43.12, 29.84, 29.84, 29.84, 20},
+														 {80, 43.59, 43.59, 32.11, 32.11, 32.11, 20},
+													 	 {80, 43.59, 43.59, 32.11, 32.11, 32.11, 20},
+													 	 { 0,    10,    20,    30,    40,    50, 60}};
+
+	anpi::Piramidal<double> (A, New);
+	double Eps = 0.5;
+	bool expected = true;
+
+	BOOST_CHECK ( expected );
+}
+			
 
 BOOST_AUTO_TEST_SUITE_END()
