@@ -56,8 +56,9 @@ void formEDP(anpi::Matrix<T> &A, int h, int v, const std::vector<T> &tTop, const
             A(k, k) = -4;
             if (i == 0)
             {   
-                if (!aislados[2]){
-                    b-=leftTemp[j];
+
+                if (!aislados[0]){
+                    b-=topTemp[j];
                 }
                 
             }
@@ -67,8 +68,9 @@ void formEDP(anpi::Matrix<T> &A, int h, int v, const std::vector<T> &tTop, const
             }
             if (i == bordeDer)
             {
-                if (!aislados[3]){
-                    b-=rightTemp[j];
+
+                if (!aislados[1]){
+                    b-=botTemp[j];
                 }
             }
             else
@@ -77,8 +79,9 @@ void formEDP(anpi::Matrix<T> &A, int h, int v, const std::vector<T> &tTop, const
             }
             if (j == 0)
             {
-                if (!aislados[0]){
-                    b-=topTemp[j];
+
+                if (!aislados[2]){
+                    b-=leftTemp[j];
                 }
             }
             else
@@ -87,8 +90,9 @@ void formEDP(anpi::Matrix<T> &A, int h, int v, const std::vector<T> &tTop, const
             }
             if (j == bordeInf)
             {
-                if (!aislados[1]){
-                    b-=botTemp[j];
+
+                if (!aislados[3]){
+                    b-=rightTemp[j];
                 }
             }
             else
